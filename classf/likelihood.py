@@ -6,14 +6,8 @@ from .core import Classifier
 logger = logging.getLogger(__name__)
 
 def make_discriminant(mu, sigma, prior):
-    mat_mu = np.matrix(mu)
-    invSigma = np.linalg.inv(sigma)
-
-    Wi = np.matrix(-0.5 * invSigma)
-    wi = np.matrix(invSigma * mat_mu)
-    wi0 = -0.5*(mat_mu.T).dot(np.linalg.inv(sigma)).dot(mat_mu) - 0.5*np.log(np.linalg.det(sigma)) + np.log(prior)
-
-    return lambda x: np.float(-0.5*np.matrix(x).dot(Wi).dot(np.matrix(x).T) + (wi.T).dot(x) + wi0)
+    det_sig = np.linalg.det(sigma)
+    return lambda x: np.exp(-0.5 * ((x - mu).T).dot(np.linalg.inv(sigma)).dot((x - mu))) / np.sqrt(((2*np.pi)**x.shape[0])*det_sig)
 
 class BayesMLE(Classifier):
     def __init__(self, training_data: Union[Iterable[np.ndarray], np.ndarray], **kwargs):
@@ -28,13 +22,29 @@ class BayesMLE(Classifier):
 
             memo = np.matrix(features - mu)
             sigma = memo.T.dot(memo) / np.sum(classes == c)
-            mu = mu.reshape(mu.shape[0], 1)
+            # mu = mu.reshape(mu.shape[0], 1)
 
             self.parameters[c] = {
                 'mu':mu,
                 'sigma':sigma,
                 'g': make_discriminant(mu.copy(), sigma.copy(), self.priors[c])
             }
+        p1_data = []
+        p2_data = []
+        num_right = 0
+
+        for tester in training_data:
+            logger.warn(tester[1:])
+            p1 = self.parameters[1]['g'](tester[1:])
+            p2 = self.parameters[2]['g'](tester[1:])
+            p3 = self.parameters[3]['g'](tester[1:])
+            test = [p1, p2, p3]
+
+            p = (np.argmax([p1,p2,p3]) +1)
+            if tester[0] == p: num_right += 1
+            logger.info("Pred: %i Actual: %i\tGot p1: %.3f | p2: %.3f | p3: %.3f" % (p, tester[0], p1, p2, p3))
+
+        logger.info("Got %i right out of %i" % (num_right, len(training_data)))
 
     def __repr__(self):
         return str(self)
