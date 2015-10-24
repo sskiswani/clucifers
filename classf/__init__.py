@@ -8,12 +8,16 @@ _all_ = [
 ]
 
 
-def run(clsf, train, test, verbose):
-    # print("got clsf: {!r} train: {!r}, test: {!r}, v: {!r}".format(clsf, train, test, verbose))
+def parse_file(file_handle):
+    pass
+
+
+def run(clsf, train, test, verbose, converter=parse_file):
+    print("got clsf: {!r} train: {!r}, test: {!r}, v: {!r}".format(clsf, train, test, verbose))
     clsf = clsf.lower()
 
-    np_train = core.dataToArray(train)
-    np_test = core.dataToArray(test)
+    np_train = converter(train)
+    np_test = converter(test)
 
     if clsf == 'mle':
         return likelihood.MLE(np_train, np_test, verbose)

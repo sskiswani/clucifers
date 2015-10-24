@@ -2,10 +2,6 @@ import pickle
 import numpy as np
 import os
 
-def dataToArray(file):
-    pass
-
-
 class Model(object):
     def __init__(self, train, test, verbose=False):
         self.train = train
