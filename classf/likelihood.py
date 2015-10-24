@@ -24,6 +24,8 @@ class BayesMLE(Classifier):
             memo = features - mu
             sigma = memo.T.dot(memo) / np.sum(classes == c)
             mu = mu.reshape(mu.shape[0], 1)
+            print(sigma)
+            exit()
 
             # Calculate discriminant function
             psigma = sigma.copy()

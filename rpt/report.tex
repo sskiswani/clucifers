@@ -5,6 +5,9 @@
 
 %%% Helpers
 \newcommand{\algtab}{\hspace{\algorithmicindent}}
+\newcommand{\wi}{\omega_i}
+\newcommand{\hsigma}{\widehat \Sigma}
+\newcommand{\hmu}{\hat \mu}
 
 %%% Draft helpers (remember to remove when done)
 \newcommand{\outline}[2]{\paragraph{\textsc{#1}}\hrulefill~\\{\small\it #2}\\\_\hrulefill~\\}
@@ -39,6 +42,28 @@ The algorithms were implemented in {\it Python 3.4}, with a dependence on the \t
 \subsection{Maximum likelihood estimation}
 \todo{You need to choose proper parametric forms for the underlying probability distributions. In the report, you need to specify the parametric forms, the maximum-likelihood estimate for the parametric forms, and the resulting discriminant functions for classification for each dataset.}
 
+\subsubsection{Gaussian Model}
+The parameters $\hmu^{\wi}$ and $\hsigma^{\wi}$ are calculated for each class $\wi$ in the training data set:
+\begin{align*}
+\hmu^{\wi} = \frac{1}{n} \sum^n_{k=0} x^{\wi}_{k} &
+~&
+\hsigma^{\wi}_{i,j} = \frac{1}{n} \sum^n_{k=0}
+    \left(x^{\wi}_{k,i} - \hmu^{\wi}_i \right)
+    \left(x^{\wi}_{k,j} - \hmu^{\wi}_j \right)^T
+\end{align*}
+
+Then, the discriminant functions are calculated:
+\begin{align*}
+W = -0.5 \left( \hsigma^{\wi} \right)^{-1}
+&~& w = \left( \hsigma^{\wi} \right)^{-1} \cdot \hmu^{\wi}
+\end{align*}
+$$\alpha^{\wi} = -0.5 \left[\hmu^{\wi, T} \cdot \hsigma^{\wi, -1} \cdot \hmu^{\wi} - \log \left| \hsigma^{\wi} \right| \right]$$
+$$g_{\wi}(x) = x^T W x + w^T x + \alpha^{\wi}$$
+
+A sample $x$ is assigned to class $\wi = \arg \max_{\wi} \left| g_{\wi}(x) \right|$.
+
+\subsubsection{Uniform Model}
+\todo{write out eqns}
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \subsection{Parzen window estimation}
