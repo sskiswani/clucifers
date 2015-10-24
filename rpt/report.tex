@@ -9,6 +9,11 @@
 \newcommand{\hsigma}{\widehat \Sigma}
 \newcommand{\hmu}{\hat \mu}
 
+%%% Shortcuts
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\bm}{\mathbf{\mu}}
+\newcommand{\bsig}{\mathbf{\Sigma}}
+
 %%% Draft helpers (remember to remove when done)
 \newcommand{\outline}[2]{\paragraph{\textsc{#1}}\hrulefill~\\{\small\it #2}\\\_\hrulefill~\\}
 \newcommand{\todo}[1]{\outline{\large TODO}{#1}}
@@ -42,7 +47,22 @@ The algorithms were implemented in {\it Python 3.4}, with a dependence on the \t
 \subsection{Maximum likelihood estimation}
 \todo{You need to choose proper parametric forms for the underlying probability distributions. In the report, you need to specify the parametric forms, the maximum-likelihood estimate for the parametric forms, and the resulting discriminant functions for classification for each dataset.}
 
-\subsubsection{Gaussian Model}
+\subsubsection{Normal Density}
+The discriminant function for the normal density is:
+
+$$g_i(\bx) = \bx^T\mathbf{W}_i\bx + \mathbf{w}_i^T \bx + w_{i0}$$
+where
+$$\mathbf{W}_i = -0.5 \bsig_i^{-1}$$
+$$\mathbf{w}_i = \bsig_i^{-1} \bm_i$$
+$$w_{i0} = -0.5 \bm_i^T \bsig_i^{-1} \bm_i - 0.5\ln \left| \bsig_i \right| + \ln P(\omega_i)$$
+
+Using the training samples, the mean and covariance can be estimated with maximum likelihood using the following definitions:
+\begin{align*}
+\hat\bm = \frac{1}{n} \sum^n_{k=1} x_k &~& \widehat \bsig = \frac{1}{n} \sum^n_{k=1} (\bx_k - \hat\bm)(\bx_k - \hat\bm)^T
+\end{align*}
+
+\subsubsection{Old Gaussian Model}
+
 The parameters $\hmu^{\wi}$ and $\hsigma^{\wi}$ are calculated for each class $\wi$ in the training data set:
 \begin{align*}
 \hmu^{\wi} = \frac{1}{n} \sum^n_{k=0} x^{\wi}_{k} &
