@@ -1,7 +1,7 @@
 import numpy as np
-from .core import Model
+from .core import Classifier
 
 
-class KNN(Model):
-    def __init__(self, train, test):
-        super().__init__(train, test)
+# class KNN(Model):
+#     def __init__(self, train, test):
+#         pass

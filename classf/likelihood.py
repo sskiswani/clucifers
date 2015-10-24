@@ -1,7 +1,17 @@
 import numpy as np
-from .core import Model
+from .core import Classifier
 
 
-class MLE(Model):
-    def __init__(self, train, test, verbose=False):
-        super().__init__(train, test, verbose)
+class BayesMLE(Classifier):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def train(self, data: np.ndarray):
+        pass
+
+    def test(self, data: np.ndarray):
+        pass
+
+    def classify(self, data: np.ndarray):
+        pass

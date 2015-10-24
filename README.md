@@ -13,22 +13,24 @@ Included in this repo are the three different data sets that were used for testi
 - **Handwritten Digits**
 
 ## Usage
-Simplified by using the `run.py` script:
-```python3 run.py classfier_name path_to_training_data path_to_testing_data [-h] [-v]```
+Simplified by using the `run.py` script, e.g.:
+```python3 run.py classifier_name path_to_training_data [-h] [-t PATH_TO_TESTING_DATA] [-c PATH_TO_CLASSIFICATION_DATA] [-v]```
 
-The possible classifier names are:
+The possible values for `classifier_name` are:
 
 - `mle` for the MLE Bayesian classifier.
 - `parzen` (or `p`) for the Parzen window Bayesian classifer.
 - `knn` for the k-nearest neighbors classifier.
 
-So, if you wanted to use the maximum likelihood classifer on the iris data set, then the command would be `python3 run.py mle ./bin/iris_training.txt ./bin/iris_test.txt`.
+So, if you wanted to use the maximum likelihood classifer on the iris data set, then the command would be `python3 run.py mle ./bin/iris_training.txt -t ./bin/iris_test.txt`.
 
-The input files should have each instance on a separate line, with components separated by spaces. The training data should have the actual class number as the first element. Per the following example (where the testing data set differs in that it excludes the class_number):
+The training and testing files should have each instance on a separate line, with components separated by spaces. Per the following example:
 ```
 class_number x0 x1 x2 x3
 class_number x0 x1 x2 x3
 ```
+
+For the classification data, the file should not include the `class_number` (e.g. each instance is separated by a new line).
 
 ## Customization
 To customize use of the `classf` module (e.g. make a custom `run.py` script), the module has a run command that can help, and following example demonstrates usage:

@@ -1,8 +1,9 @@
 # My stuff
 .idea/
-*.aux
-*.log
-*.synctex.gz
+rpt/*.aux
+rpt/*.log
+rpt/*.synctex.gz
+rpt/*.out
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

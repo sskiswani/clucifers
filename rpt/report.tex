@@ -5,14 +5,16 @@
 
 %%% Helpers
 \newcommand{\algtab}{\hspace{\algorithmicindent}}
-\newcommand{\todo}{
-    {\Large TODO}
-    \bigskip
-}
+
+%%% Draft helpers (remember to remove when done)
+\newcommand{\outline}[2]{\paragraph{\textsc{#1}}\hrulefill~\\{\small\it #2}\\\_\hrulefill~\\}
+\newcommand{\todo}[1]{\outline{\large TODO}{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \title{
-    CAP5638: Project Project 1 \\
-    \large Classification Using Maximum-likelihood, Parzen Window, and K-Nearest Neighbor
+    CAP5638 Project 1\\
+    \large Classification Using Maximum-likelihood, Parzen Window, and k-Nearest Neighbor
 }
 \author{Suhib Sam Kiswani}
 \date{October 26, 2015}
@@ -22,20 +24,78 @@
 \begin{document}
 \maketitle
 
+\todo{You need to turn in a report, including description of your algorithms and implementations,
+experimental results, and comparison and evaluation and analysis of the three different methods.}
+
+\abstract{For each dataset, you need to first estimate the necessary data normalization and parameters using the training set only (you need to document the results for different choices of parameters on the training set in the leaveone- out sense for Parzen windows and k-nearest neighbor rule) and then document the classification results on the test set using each of the methods. Then you need to compare different methods in terms of classification performance and required time for classification, and give justifications for your observed empirical results.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Implementation Details}
+
+The algorithms were implemented in {\it Python 3.4}, with a dependence on the \textit{numpy} module from the \textit{scipy} \cite{sp} library.
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\subsection{Maximum likelihood estimation}
+\todo{You need to choose proper parametric forms for the underlying probability distributions. In the report, you need to specify the parametric forms, the maximum-likelihood estimate for the parametric forms, and the resulting discriminant functions for classification for each dataset.}
+
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\subsection{Parzen window estimation}
+\todo{You need to choose proper window functions, which you need to specify in the report along with the resulting discriminant functions for classification for each dataset. Here we choose the parameter values using the leave-one-out performance on the training set: For a set of candidate values, we compute the leave-one-out performance on the training set for each candidate and the optimal one is the one that gives the best leave-one-out performance (in case there are ties, specify how the ties will be broken).}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\subsection{Basic k-nearest neighbor}
+\todo{In this case, you need to implement the k-nearest neighbor classifier by first finding the first k nearest neighbors of an input and then classifying it as the class that appeared most among the nearest neighbors. Here you need to specify the distance measure between two inputs. Here we choose the parameter values using the leave-one-out performance on the training set: For a set of candidate values, we compute the leave-one-out performance on the training set for each candidate and the optimal one is the one that gives the best leave-one-out performance (in case there are ties, specify how the ties will be broken).}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Experimental Results}
+\todo{Document the classification results on the test set using each of the methods. For each dataset, you need to first estimate the necessary data normalization and parameters using the training set only (you need to document the results for different choices of parameters on the training set in the leaveone- out sense for Parzen windows and k-nearest neighbor rule)}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\subsection{Iris Data Set}
+\todo{you need to first estimate the necessary data normalization and parameters using the training set only (you need to document the results for different choices of parameters on the training set in the leaveone-out sense for Parzen windows and k-nearest neighbor rule) and then document the classification results on
+the test set using each of the methods.}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\subsection{UCI Wine Data Set}
+\todo{you need to first estimate the necessary data normalization and parameters using the training set only (you need to document the results for different choices of parameters on the training set in the leaveone-out sense for Parzen windows and k-nearest neighbor rule) and then document the classification results on
+the test set using each of the methods.}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\subsection{Handwritten Digits Data Set}
+\todo{you need to first estimate the necessary data normalization and parameters using the training set only (you need to document the results for different choices of parameters on the training set in the leaveone-out sense for Parzen windows and k-nearest neighbor rule) and then document the classification results on
+the test set using each of the methods.}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Analysis}
-\todo
-
-\subsection{Iris Data}
-\todo
-
-\subsection{UCI Wine Data}
-\todo
-
-\subsection{Handwritten Digits Data}
-\todo
+\todo{You need to compare different methods in terms of classification performance and required time for classification, and give justifications for your observed empirical results.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\section{Extra Credit}
+\todo{Please state clearly in your report if you have implemented any of the following extra
+credit options.}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\subsection{Speed up using k-d tree}
+\todo{With k from 1 to 10 with an increment of 1, first build a k-d tree from the training set and then classify the test samples using the k-nearest neighbor classifier by finding the nearest neighbors using the k-d tree. Compare the classification accuracy and the number of distance calculations with the basic k nearest neighbor implementation on the three datasets. Summarize your observations and justify your results.}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\subsection{Recognition of my handwritten digits}
+\todo{Apply the best classifier you have for hand written digit recognition on a test set consisting of your own written digits (you need to create the dataset). Document the classification performance, what you have done to improve the performance, and any additional issues you have handled.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{thebibliography}{9}
+
+\bibitem{sp}
+    Jones E, Oliphant E, Peterson P, \emph{et al.}
+    {\bf SciPy: Open Source Scientific Tools for Python}, 2001-,
+    \url{http://www.scipy.org/} [Online; accessed 2015-10-24].
+
+\end{thebibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{document}
