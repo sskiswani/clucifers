@@ -67,7 +67,7 @@ $$p(\bx|\mathbf{\omega_i}) = \frac{1}{\sqrt{(2 \pi)^n \det \widehat\bsig_i}} \ex
 The classification of instance $\bx$ is $\mathbf{\omega_i} = \arg\max_{\mathbf{\omega_i}} \left| p(\bx|\mathbf{\omega_i}) P(\mathbf{\omega_i}) \right|$
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\subsubsection{Uniform Model}
+\subsubsection{Uniform}
 \todo{write out eqns}
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -88,8 +88,7 @@ The classification of instance $\bx$ is $\mathbf{\omega_i} = \arg\max_{\mathbf{\
 \subsubsection{Maximum likelihood estimation}
 \begin{enumerate}
 \item {\bf Normal Density}
-
-The parameters for $\hat\theta$ for each of the classes from the training samples were:
+The estimated parameters of $\hat\theta$ for each of the classes from the training samples were:
 $$\hat\bm_1 = \left( 4.98181818,  3.39090909,  1.45151515,  0.25151515 \right)$$
 $$\widehat\bsig_1 = \begin{pmatrix}
     0.10876033 & 0.08619835 & 0.02033058 & 0.01093664\\
@@ -116,11 +115,19 @@ $$\widehat\bsig_3 = \begin{pmatrix}
 
 \smallskip
 
+This method correctly classified $48$ of the $51$ testing samples ($94.1$\% accuracy).
+
+\todo{add decision boundary graphs}
+
+\item {\bf Uniform}
+\todo{gotta do it}
+
 \end{enumerate}
 
 \subsubsection{Parzen window estimation}
-\subsubsection{Basic k-nearest neighbor}
+\todo{document results for diff params on training set in the leaveone-out sense and document results.}
 
+\subsubsection{Basic k-nearest neighbor}
 \todo{you need to first estimate the necessary data normalization and parameters using the training set only (you need to document the results for different choices of parameters on the training set in the leaveone-out sense for Parzen windows and k-nearest neighbor rule) and then document the classification results on
 the test set using each of the methods.}
 

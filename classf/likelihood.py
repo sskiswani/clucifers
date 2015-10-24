@@ -56,8 +56,7 @@ class BayesMLE(Classifier):
             pred = classes[np.argmax(probablities)]
             if x[0] == pred: num_right += 1
         logger.info('Got %i right out of %i (%.2f%% accuracy)' % (num_right, len(testing_data), (num_right / len(testing_data))*100))
-        from pprint import pprint
-        pprint(self.parameters)
+
     def __repr__(self):
         return str(self)
 
