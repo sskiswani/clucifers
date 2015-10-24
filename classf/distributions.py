@@ -1,7 +1,9 @@
 import numpy as np
-# import pickle
-# import os
-# from typing import Iterable
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 class ParametricModel(object):
     def __init__(self):
@@ -9,9 +11,9 @@ class ParametricModel(object):
 
 
 class NormalModel(ParametricModel):
-    def __init__(self):
-        pass
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
 class LinearModel(ParametricModel):
-    def __init__(self):
-        pass
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)

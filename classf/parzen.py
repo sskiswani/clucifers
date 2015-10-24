@@ -1,7 +1,4 @@
 import numpy as np
-from .core import Classifier
+import logging
 
-
-# class Parzen(Model):
-#     def __init__(self, train, test):
-#         super().__init__(train, test)
+logger = logging.getLogger(__name__)
