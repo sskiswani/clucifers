@@ -6,33 +6,6 @@ from .core import Classifier
 
 logger = logging.getLogger(__name__)
 
-def discriminant_function(x, sigma, mu):
-    """
-    Calculates the value of the discriminant function for a dx1 dimensional
-    sample given the covariance matrix and mean vector.
-
-    Keyword arguments:
-        x: A dx1 dimensional numpy array representing the sample.
-        sigma: numpy array of the covariance matrix.
-        mu: dx1 dimensional numpy array of the sample mean.
-
-    Returns a float value as result of the discriminant function.
-
-    """
-    W_i = (-1/2) * np.linalg.inv(sigma)
-    assert(W_i.shape[0] > 1 and W_i.shape[1] > 1), 'W_i must be a matrix'
-
-    w_i = np.linalg.inv(sigma).dot(mu)
-    assert(w_i.shape[0] > 1 and w_i.shape[1] == 1), 'w_i must be a column vector'
-
-    omega_i_p1 = (((-1/2) * (mu).T).dot(np.linalg.inv(sigma))).dot(mu)
-    omega_i_p2 = (-1/2) * np.log(np.linalg.det(sigma))
-    omega_i = omega_i_p1 - omega_i_p2
-    assert(omega_i.shape == (1, 1)), 'omega_i must be a scalar'
-
-    g = ((x.T).dot(W_i)).dot(x) + (w_i.T).dot(x) + omega_i
-    return float(g)
-
 def make_discriminant(W, w, omega):
     return lambda x: float(((x.T).dot(W)).dot(x) + (w.T).dot(x) + omega)
 
