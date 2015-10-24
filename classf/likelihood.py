@@ -35,20 +35,6 @@ class BayesMLE(Classifier):
                 'sigma':sigma,
                 'g': make_discriminant(mu.copy(), sigma.copy(), self.priors[c])
             }
-        p1_data = []
-        p2_data = []
-        num_right = 0
-
-        for tester in training_data:
-            logger.warn(tester[1:])
-            p1 = self.parameters[1]['g'](tester[1:])
-            p2 = self.parameters[2]['g'](tester[1:])
-
-            if tester[0] == (1 if p1 > p2 else 2): num_right += 1
-            logger.info("Pred: %i Actual: %i\tGot p1: %.3f and p2: %.3f" % (1 if p1 > p2 else 2, tester[0], p1, p2))
-            p1_data.append(p1)
-            p2_data.append(p2)
-        logger.info("Got %i right out of %i" % (num_right, len(training_data)))
 
     def __repr__(self):
         return str(self)
