@@ -38,29 +38,7 @@ class BayesMLE(Classifier):
                 'sigma':psigma.copy(),
                 'g': make_discriminant(W, w, omega)
             }
-
-        p1_data = []
-        p2_data = []
-        num_right = 0
-        for tester in training_data:
-            p1 = self.parameters[1]['g'](tester[1:])
-            p2 = self.parameters[2]['g'](tester[1:])
-            if tester[0] == (1 if p1 > p2 else 2): num_right += 1
-            logger.info("Pred: %i Actual: %i\tGot p1: %.3f and p2: %.3f" % (1 if p1 > p2 else 2, tester[0], p1, p2))
-            p1_data.append(p1)
-            p2_data.append(p2)
-        logger.info("Got %i right out of %i" % (num_right, len(training_data)))
-        p1_data = np.array(p1_data)
-        p2_data = np.array(p2_data)
-
-        import matplotlib.pyplot as plt
-        fig, ax = plt.subplots(1, 1)
-        ax.fill_between(range(len(p1_data)), p1_data, p2_data, where=p1_data > p2_data, facecolor='green', interpolate=True)
-        ax.fill_between(range(len(p1_data)), p1_data, p2_data, where=p1_data < p2_data, facecolor='blue', interpolate=True)
-
-        # ax.fill_between(range(len(p1_data)), p2_data, p1_data, facecolor='red')
-
-        plt.show()
+        # end loop
 
     def __repr__(self):
         return str(self)
