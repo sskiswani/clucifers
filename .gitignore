@@ -1,5 +1,6 @@
 # My stuff
 .idea/
+_grave/
 rpt/*.aux
 rpt/*.log
 rpt/*.synctex.gz

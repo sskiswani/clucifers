@@ -9,11 +9,14 @@ class ParametricModel(object):
     def __init__(self):
         pass
 
-
 class NormalModel(ParametricModel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class LinearModel(ParametricModel):
+class UniformModel(ParametricModel):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+class BernoulliModel(ParametricModel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

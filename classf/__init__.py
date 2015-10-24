@@ -3,12 +3,10 @@ import logging
 from typing import Callable, Optional, Iterable
 
 from . import core
-from . import distributions
 from . import likelihood, nearest, parzen
 
 _all_ = [
     'core',
-    'distributions',
     'likelihood',
     'nearest',
     'parzen'
@@ -52,13 +50,8 @@ def run(classifier_name: str,
         logging.basicConfig(level=logging.DEBUG)
         logging.info('Logging level set to DEBUG')
 
-    classifier = core.get_classifier(classifier_name)
-
     np_train = converter(training_data)
-    classifier.train(np_train)
-
-    classifier.train(np.array([1, 2, 3, 4, 5]))
-    print(repr(classifier.trained))
+    classifier = core.get_classifier(classifier_name, np_train)
 
     if testing_data is not None:
         np_test = converter(testing_data)

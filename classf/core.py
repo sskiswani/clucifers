@@ -14,38 +14,16 @@ class Classifier(object):
     """
     Base class for all classifiers, defines the expected functions every classifier should have.
     """
-    def __init__(self, **kwargs):
-        self.training_data = []
-        self.priors = {}
+    def __init__(self, training_data: Union[Iterable[np.ndarray], np.ndarray], **kwargs):
+        self.training_data = training_data
 
-    def add_training_data(self, data: Union[Iterable[np.ndarray], np.ndarray]):
-        """
-        Append training data.
+        classes = training_data[:, 0]
+        n = training_data.shape[0]
+        self.priors = {a: (np.sum(classes == a) / n) for a in np.unique(classes)}
 
-        :param data: Training data.
-        """
-        raise NotImplementedError("mehh...")
-        # if hasattr(data, 'shape'):
-        #     if len(data.shape) == 1:
-        #         self.training_data.append(data)
-        #     elif len(data.shape) == 2:
-        #         self.training_data.extend(data)
-        #     else:
-        #         raise TypeError("Improperly shaped data (shape = %s)" % repr(data.shape))
-
-    def train(self, data: Union[Iterable[np.ndarray], np.ndarray]):
-        """
-        Train the classifier on a given data set.
-
-        :param data: the data to use for training.
-        """
-        assert not hasattr(super(), 'train')
-
-    def __str__(self):
-        return "<Classfier\n" \
-               "\tPriors: {!r}\n" \
-               "\tTraining Data: {!r}\n" \
-               ">".format(self.priors, self.training_data)
+    @property
+    def classes(self):
+        return self.priors.keys()
 
     def save(self, location: str):
         """
@@ -75,12 +53,19 @@ class Classifier(object):
         obj.__dict__.update(attributes)
         return obj
 
+    def __str__(self):
+        return "<Classfier\n" \
+               "\tPriors: {!r}\n" \
+               "\tTraining Data: {!r}\n" \
+               ">".format(self.priors, self.training_data)
 
-def get_classifier(classifier_name: str) -> Classifier:
+
+def get_classifier(classifier_name: str, training_data: Union[Iterable[np.ndarray], np.ndarray], **kwargs):
     """
     Get a classifier by a name keyword.
 
     :param str classifier_name: name of the classifier.
+    :param training_data: data used to train the classifier
     :return: A classifier instance.
     :rtype: Classifier
     """
@@ -88,7 +73,7 @@ def get_classifier(classifier_name: str) -> Classifier:
 
     if classifier_name == 'mle':
         from .likelihood import BayesMLE
-        return BayesMLE()
+        return BayesMLE(training_data, **kwargs)
 
     if classifier_name == 'parzen' or classifier_name == 'p':
         raise NotImplementedError("Parzen window estimation not implemented yet.")
