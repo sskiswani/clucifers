@@ -84,6 +84,43 @@ The classification of instance $\bx$ is $\mathbf{\omega_i} = \arg\max_{\mathbf{\
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \subsection{Iris Data Set}
+
+\subsubsection{Maximum likelihood estimation}
+\begin{enumerate}
+\item {\bf Normal Density}
+
+The parameters for $\hat\theta$ for each of the classes from the training samples were:
+$$\hat\bm_1 = \left( 4.98181818,  3.39090909,  1.45151515,  0.25151515 \right)$$
+$$\widehat\bsig_1 = \begin{pmatrix}
+    0.10876033 & 0.08619835 & 0.02033058 & 0.01093664\\
+    0.08619835 & 0.13597796 & 0.01410468 & 0.00865014\\
+    0.02033058 & 0.01410468 & 0.03401286 & 0.00825528\\
+    0.01093664 & 0.00865014 & 0.00825528 & 0.0134068
+\end{pmatrix}$$
+
+$$\hat\bm_2 = \left( 5.89090909,  2.78787879,  4.26363636,  1.31515152 \right)$$
+$$\widehat\bsig_2 = \begin{pmatrix}
+    0.2353719  & 0.06867769 & 0.165427   & 0.05256198\\
+    0.06867769 & 0.08530762 & 0.07743802 & 0.04442608\\
+    0.165427   & 0.07743802 & 0.20110193 & 0.06933884\\
+    0.05256198 & 0.04442608 & 0.06933884 & 0.0394674
+\end{pmatrix}$$
+
+$$\hat\bm_3 = \left( 6.66060606,  2.94848485,  5.58484848,  1.99393939 \right)$$
+$$\widehat\bsig_3 = \begin{pmatrix}
+    0.36359963 & 0.11887971 & 0.2851607  & 0.03976125\\
+    0.11887971 & 0.10613407 & 0.08861341 & 0.03817264\\
+    0.2851607  & 0.08861341 & 0.29219467 & 0.03202938\\
+    0.03976125 & 0.03817264 & 0.03202938 & 0.06784206
+\end{pmatrix}$$
+
+\smallskip
+
+\end{enumerate}
+
+\subsubsection{Parzen window estimation}
+\subsubsection{Basic k-nearest neighbor}
+
 \todo{you need to first estimate the necessary data normalization and parameters using the training set only (you need to document the results for different choices of parameters on the training set in the leaveone-out sense for Parzen windows and k-nearest neighbor rule) and then document the classification results on
 the test set using each of the methods.}
 

@@ -55,7 +55,7 @@ def run(classifier_name: str,
 
     if testing_data is not None:
         np_test = converter(testing_data)
-        # classifier.test(np_test)
+        classifier.test(np_test)
 
     if classify_data is not None:
         np_clsfy = converter(classify_data)

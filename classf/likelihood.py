@@ -22,7 +22,6 @@ class BayesMLE(Classifier):
 
             memo = np.matrix(features - mu)
             sigma = memo.T.dot(memo) / np.sum(classes == c)
-            # mu = mu.reshape(mu.shape[0], 1)
 
             self.parameters[c] = {
                 'mu': mu,
@@ -44,12 +43,27 @@ class BayesMLE(Classifier):
         #     p = (np.argmax([p1,p2,p3]) +1)
         #     if tester[0] == p: num_right += 1
         #     logger.info("Pred: %i Actual: %i\tGot p1: %.3f | p2: %.3f | p3: %.3f" % (p, tester[0], p1, p2, p3))
-        # 
+        #
         # logger.info("Got %i right out of %i" % (num_right, len(training_data)))
 
+    def test(self, testing_data: Union[Iterable[np.ndarray], np.ndarray]):
+        classes = list(self.priors.keys())
+        num_right = 0
+        for x in testing_data:
+            probablities = []
+            for c in classes:
+                probablities.append(self.parameters[c]['g'](x[1:]))
+            pred = classes[np.argmax(probablities)]
+            if x[0] == pred: num_right += 1
+        logger.info('Got %i right out of %i (%.2f%% accuracy)' % (num_right, len(testing_data), (num_right / len(testing_data))*100))
+        from pprint import pprint
+        pprint(self.parameters)
     def __repr__(self):
         return str(self)
 
 
 class GaussianMLE(BayesMLE):
+    pass
+
+class UniformMLE(Classifier):
     pass

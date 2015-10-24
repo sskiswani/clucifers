@@ -21,6 +21,9 @@ class Classifier(object):
         n = training_data.shape[0]
         self.priors = {a: (np.sum(classes == a) / n) for a in np.unique(classes)}
 
+    def test(self, testing_data: Union[Iterable[np.ndarray], np.ndarray]):
+        assert not hasattr(super(), 'draw')
+
     @property
     def classes(self):
         return self.priors.keys()
