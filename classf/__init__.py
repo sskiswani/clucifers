@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import logging
 from typing import Callable, Optional, Iterable
 
@@ -50,20 +51,18 @@ def run(classifier_name: str,
 
     if testing_data is not None:
         np_test = converter(testing_data)
-        if not isinstance(classifier, nearest.NearestNeighbors):
+        if isinstance(classifier, nearest.NearestNeighbors):
+            results = [classifier.test(np_test, alt_k=i) for i in range(1, 20)]
+
+            plt.plot(range(1, 20), results)
+            plt.xlabel('k')
+            plt.ylabel('Accuracy')
+            plt.xticks(range(1, 20))
+            plt.grid()
+            plt.show()
+
+        else:
             classifier.test(testing_data)
-            return
-
-        results = [classifier.test(np_test, alt_k=i) for i in range(1, 20)]
-
-        import matplotlib.pyplot as plt
-        plt.plot(range(1, 20), results)
-        plt.xlabel('k')
-        plt.ylabel('Accuracy')
-        plt.xticks(range(1,20))
-        plt.grid()
-        plt.show()
-
 
     if classify_data is not None:
         np_clsfy = converter(classify_data)
