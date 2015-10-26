@@ -61,8 +61,39 @@ class BayesMLE(Classifier):
         return str(self)
 
 
-class GaussianMLE(BayesMLE):
-    pass
+class GaussianMLE(Classifier):
+    def __init__(self, training_data: Union[Iterable[np.ndarray], np.ndarray], **kwargs):
+        super().__init__(training_data, **kwargs)
+
+        classes = training_data[:, 0]
+        self.parameters = {}
+        for c in self.priors.keys():
+            features = training_data[np.where(classes == c)][:, 1:]
+
+            mu = np.sum(features, axis=0) / np.sum(classes == c)
+
+            memo = np.matrix(features - mu)
+            sigma = memo.T.dot(memo) / np.sum(classes == c)
+
+            self.parameters[c] = {
+                'mu': mu,
+                'sigma': sigma,
+                'g': make_discriminant(mu.copy(), sigma.copy(), self.priors[c])
+            }
+
+    def test(self, testing_data: Union[Iterable[np.ndarray], np.ndarray]):
+        classes = list(self.priors.keys())
+        num_right = 0
+        for x in testing_data:
+            probablities = []
+            for c in classes:
+                probablities.append(self.parameters[c]['g'](x[1:]))
+            pred = classes[np.argmax(probablities)]
+            if x[0] == pred: num_right += 1
+        logger.info('Got %i right out of %i (%.2f%% accuracy)' % (num_right, len(testing_data), (num_right / len(testing_data))*100))
+
+    def __repr__(self):
+        return str(self)
 
 class UniformMLE(Classifier):
     pass

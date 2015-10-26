@@ -78,11 +78,13 @@ def get_classifier(classifier_name: str, training_data: Union[Iterable[np.ndarra
         from .likelihood import BayesMLE
         return BayesMLE(training_data, **kwargs)
 
+    if classifier_name == 'knn':
+        from .nearest import NearestNeighbors
+        return NearestNeighbors(training_data, **kwargs)
+
     if classifier_name == 'parzen' or classifier_name == 'p':
         raise NotImplementedError("Parzen window estimation not implemented yet.")
 
-    if classifier_name == 'knn':
-        raise NotImplementedError("Nearest Neighbors not implemented yet!")
 
     raise KeyError("Couldn't find classifier with name %s." % classifier_name)
 

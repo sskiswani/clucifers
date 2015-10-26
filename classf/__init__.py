@@ -12,24 +12,19 @@ _all_ = [
     'parzen'
 ]
 
-SomeType = np.ndarray
-
 def parse_file(fpath: str) -> np.ndarray:
     """
     :param str fpath: path to the file containing the data.
 
     :return: List of ndarrays.
-    :rtype [ndarray]:
+    :rtype np.ndarray:
     """
     return np.genfromtxt(fpath)
-    # with open(os.path.abspath(fpath), 'r') as f:
-    #     result = [np.fromstring(line, sep=' ') for line in f]
-    # return result
 
 
 def run(classifier_name: str,
         training_data: str,
-        converter: Callable[[str], Iterable[SomeType]]=parse_file,
+        converter: Callable[[str], Iterable[np.ndarray]]=parse_file,
         testing_data: Optional[str]=None,
         classify_data: Optional[str]=None,
         verbose: Optional[bool]=False) -> core.Classifier:
@@ -55,7 +50,20 @@ def run(classifier_name: str,
 
     if testing_data is not None:
         np_test = converter(testing_data)
-        classifier.test(np_test)
+        if not isinstance(classifier, nearest.NearestNeighbors):
+            classifier.test(testing_data)
+            return
+
+        results = [classifier.test(np_test, alt_k=i) for i in range(1, 20)]
+
+        import matplotlib.pyplot as plt
+        plt.plot(range(1, 20), results)
+        plt.xlabel('k')
+        plt.ylabel('Accuracy')
+        plt.xticks(range(1,20))
+        plt.grid()
+        plt.show()
+
 
     if classify_data is not None:
         np_clsfy = converter(classify_data)
