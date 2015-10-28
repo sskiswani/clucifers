@@ -15,6 +15,7 @@
 \newcommand{\bx}{\mathbf{x}}
 \newcommand{\bm}{\mathbf{\mu}}
 \newcommand{\bsig}{\mathbf{\Sigma}}
+\newcommand{\imgwidth}{.8\textwidth}
 
 %%% Draft helpers (remember to remove when done)
 \newcommand{\outline}[2]{\paragraph{\textsc{#1}}\hrulefill~\\{\small\it #2}\\\_\hrulefill}
@@ -25,24 +26,22 @@
 \title{CAP5638 Project 1\\
 \large Classification Using Maximum-likelihood, Parzen Window, and $k$-Nearest Neighbors}
 \author{Suhib Sam Kiswani}
-\date{October 26, 2015}
+\date{October 28, 2015}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 \maketitle
 
-\begin{enumerate}
-\item redo classification results using max leave one training point out success rates.
-\end{enumerate}
+The algorithms were implemented in {\it Python 3.4}, with a dependence on the \textit{scipy} \cite{sp} library. 
 
-The algorithms were implemented in {\it Python 3.4}, with a dependence on the \textit{scipy} \cite{sp} library.
+The {\bf Speed up using k-d tree} extra credit option was implemented.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Maximum likelihood estimation}
-\subsection{Parametric Forms}
+%\subsection{Parametric Forms}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\subsubsection{Normal Density}
+%\subsubsection{Normal Density}
 The discriminant function for the normal density is:
 
 $$g_i(\bx) = \bx^T\mathbf{W}_i\bx + \mathbf{w}_i^T \bx + w_{i0}$$
@@ -62,15 +61,13 @@ $$p(\bx|\mathbf{\omega_i}) = \frac{1}{\sqrt{(2 \pi)^n \det \widehat\bsig_i}} \ex
 The classification of instance $\bx$ is $\mathbf{\omega_i} = \arg\max_{\mathbf{\omega_i}} \left| p(\bx|\mathbf{\omega_i}) P(\mathbf{\omega_i}) \right|$
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\subsubsection{Uniform}
-\todo{write out eqns}
+%\subsubsection{Uniform}
+%\todo{write out eqns}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Experimental Results}
 \subsubsection{Iris Data Set}
-\begin{enumerate}
-\item {\bf Normal Density}
-The estimated parameters of $\hat\theta$ for each of the classes from the training samples were:
+This method correctly classified $48$ of the $51$ testing samples ($94.1$\% accuracy). The estimated parameters of $\hat\theta$ for each of the classes from the training samples were:
 $$\hat\bm_1 = \left( 4.98181818,  3.39090909,  1.45151515,  0.25151515 \right)$$
 $$\widehat\bsig_1 = \begin{pmatrix}
     0.10876033 & 0.08619835 & 0.02033058 & 0.01093664\\
@@ -95,16 +92,24 @@ $$\widehat\bsig_3 = \begin{pmatrix}
     0.03976125 & 0.03817264 & 0.03202938 & 0.06784206
 \end{pmatrix}$$
 
-\smallskip
-
-This method correctly classified $48$ of the $51$ testing samples ($94.1$\% accuracy).
-\todo{add decision boundary graphs}
-
-\item {\bf Uniform}
-\todo{gotta do it}
-\end{enumerate}
-
 \subsubsection{UCI Wine Data Set}
+This classifier correctly classified 85 out of 89 testing samples ($95.51 \%$ accuracy). The estimated parameters of $\hat\mu_i$ for each of the classes from the training samples were (\emph{note:} the values of sigma are too large to include here):
+
+\begin{align*}
+\hat \bm_1 = &~( 13.796, 1.865, 2.446, 16.763, 106.2, 2.885,\\
+~& 3.072, 0.289, 2.008, 5.504, 1.07, 3.17, 1108.4 )\\
+~&~\\
+\hat \bm_2 = &~( 12.281, 1.813, 2.237, 19.803, 93.686, 2.236,\\
+~& 2.027, 0.357, 1.585, 3.128, 1.022, 2.745, 532.057 )\\
+~&~\\
+\hat \bm_3 = &~( 13.172, 2.985, 2.445, 21.375, 99.875, 1.652,\\
+~& 0.788, 0.438, 1.184, 7.273, 0.683, 1.658, 616.458 )
+\end{align*}
+
+
+
+\subsubsection{Handwriting Data set}
+This classifier correctly classified 545 out of 2007 testing samples ($27.15 \%$ accuracy). The corresponding values for this data set are too large to include here.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Parzen window estimation}
@@ -114,7 +119,7 @@ $$\phi(\bx) = \left\{\begin{matrix}
 0 & otherwise &
 \end{matrix}\right.$$
 
-with constants:
+Where the window width is given by $h_n$ and the volume is given by:
 $$V_n = h_n^d$$
 
 \begin{enumerate}
@@ -126,90 +131,127 @@ $$p(\bx | \omega_i ) = \frac{1}{n} \sum^n_{i=1} \frac{1}{V_n} \phi \left(\frac{1
 \end{enumerate}
 
 All data processed by this classifier was transformed using the \emph{z-score}:
-$$\mathbf{z_x} = \frac{\bx - \bm}{\mathbf{\sigma}}$$
+$$z_{\omega_i}(\bx) = \frac{\bx - \bm_{\omega_i}}{\mathbf{\sigma_{\omega_i}}}$$
+
+A given point $\bx$ is classified as class $\omega_i$ where: 
+$$\mathbf{\omega_i} = \arg\max_{\mathbf{\omega_i}} \left| p(z_{\omega_i}(\bx)|\mathbf{\omega_i}) P(\mathbf{\omega_i}) \right|$$
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Experimental Results}
-For all given data sets, the \emph{Hypercube kernel} was the most accurate method.
+For all given data sets, the \emph{Hypercube kernel} was the most accurate method. Overall, this classifier was the slowest (e.g. required the most processing time).
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \subsubsection{Iris Data Set}
+
 \begin{figure}[H]
 \centering
-\includegraphics[width=.8\textwidth]{p_box_iris}
+\includegraphics[width=\imgwidth]{p_box_iris}
 \caption{Accuracy of the Parzen window classifier using the \emph{Hypercube kernel} across different window widths for the iris data set.}
 \label{pb_iris}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=.8\textwidth]{pg_iris}
+\includegraphics[width=\imgwidth]{pg_iris}
 \caption{Accuracy of the Parzen window classifier using the \emph{Gaussian kernel} across different window widths for the iris data set.}
 \label{pg_iris}
 \end{figure}
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \subsubsection{UCI Wine Data Set}
+
 \begin{figure}[H]
 \centering
-\includegraphics[width=.8\textwidth]{p_box_wine}
+\includegraphics[width=\imgwidth]{p_box_wine}
 \caption{Accuracy of the Parzen window classifier using the hypercube window function across different window widths for the wine data set.}
 \label{pb_wine}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=.8\textwidth]{pg_wine}
+\includegraphics[width=\imgwidth]{pg_wine}
 \caption{Accuracy of the Parzen window classifier using the \emph{Gaussian kernel} across different window widths for the wine data set.}
 \label{pg_wine}
 \end{figure}
 
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \subsubsection{Handwritten Digits Data Set}
+The Parzen window classifier failed to perform very well for this data set, in addition to its extremely slow run-time (which is expected, given the high dimensionality of this data set).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\imgwidth]{pb_hand}
+\caption{Accuracy of the Parzen window classifier using the \emph{Hypercube kernel} across different window widths for the handwriting data set.}
+\label{pb_hand}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\imgwidth]{pg_wine}
+\caption{Accuracy of the Parzen window classifier using the \emph{Gaussian kernel} across different window widths for the handwriting data set.}
+\label{pg_hand}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$k$-nearest neighbors}
 The $k$-nearest neighbors classifier was implemented using a $kd$-tree, subdividing along the median of the training data. This distance metric $d$ used for this classifier was Euclidean distance ($||\bx - \textbf{y}||$).
 
-\todo{{\bf Speed up using k-d tree} With k from 1 to 10 with an increment of 1, first build a k-d tree from the training set and then classify the test samples using the k-nearest neighbor classifier by finding the nearest neighbors using the k-d tree. Compare the classification accuracy and the number of distance calculations with the basic k nearest neighbor implementation on the three datasets. Summarize your observations and justify your results.}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Experimental Results}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \subsubsection{Iris Data Set}
 \begin{figure}[H]
 \centering
-\includegraphics[width=.9\textwidth]{knn_kd_iris}
-\caption{Accuracy of the $k$-nearest neighbors classifier using a $kd$-tree for $1 \leq k \leq 19$ on the Iris data set.}
-\label{knn_iris}
+\includegraphics[width=\imgwidth]{knn_kd_iris}
+\caption{The number of correct classifications by$k$-nearest neighbors classifier using a $kd$-tree for $1 \leq k \leq 19$ on the iris data set.}
+\label{knn:kd:iris}
 \end{figure}
 
-The $k$-nearest neighbors classifier achieved a maximum classification rate of $96.08\%$ accuracy for $k=1$.
+The $k$-nearest neighbors classifier achieved a maximum classification rate of $96.08\%$ accuracy for $k=1$. Performance of this classifier degraded rapidly, which is most likely a side of effect of the fact that \emph{sepal width} had poor class correlation, yet was given equal weight as other  features. This can be improved by using applying a normalizing transform to the data set, or choosing a better suited distance metric for this data set.
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \subsubsection{UCI Wine Data Set}
 \begin{figure}[H]
 \centering
-\includegraphics[width=.9\textwidth]{knn_kd_wine}
-\caption{The accuracy of the $k$-nearest neighbors classifier using a $kd$-tree for $1 \leq k \leq 19$ on the UCI wine data set.}
-\label{knn_wine}
+\includegraphics[width=\imgwidth]{knn_kd_wine}
+\caption{The number of correct classifications by$k$-nearest neighbors classifier using a $kd$-tree for $1 \leq k \leq 19$ on the wine data set.}
+\label{knn:kd:wine}
 \end{figure}
 
-Here, the $k$-nearest neighbors classifier achieved a maximum classification rate of $82.02\%$ accuracy for $k=5$.
+Here, the $k$-nearest neighbors classifier achieved a maximum classification rate of $82.02\%$ accuracy for $k=5$. Notably, in this instance, the classifier could not exceed the threshold of $90\%$ accuracy. Most likely this is due to the fact that Euclidean distance may not be a suitable distance metric for this data set. In the \emph{README} included with this data set, a $1$-NN classifier achieved $96.1\%$ accuracy on z-transformed data. As such, that may result in a significant improvement (as was the case in the iris data set). 
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \subsubsection{Handwritten Digits Data Set}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\imgwidth]{knn_kd_hands}
+\caption{The accuracy of the $k$-nearest neighbors classifier using a $kd$-tree for $1 \leq k \leq 19$ on the handwriting data set.}
+\label{knn:kd:hands}
+\end{figure}
 
+Again, the optimal $k$ for the classifier is $1$, with 497 correct classifications out of 2007 ($24.76\%$ accuracy). No transformations were applied to this data set, as reflected in the poor accuracy of this classifier.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Analysis}
-\todo{You need to compare different methods in terms of classification performance and required time for classification, and give justifications for your observed empirical results.}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{enumerate}
+\item {\bf Iris data set.}
+All methods performed very well on the iris data set. This is most likely due to the fact that there is a high class correlation for two of the features.
 
-\section{Extra Credit}
-\todo{Please state clearly in your report if you have implemented any of the following extra
-credit options.}
+\item {\bf Wine data set.}
+This data set proved more difficult for my implementation of the classifiers.
 
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\subsection{Recognition of my handwritten digits}
-\todo{Apply the best classifier you have for hand written digit recognition on a test set consisting of your own written digits (you need to create the dataset). Document the classification performance, what you have done to improve the performance, and any additional issues you have handled.}
+\item {\bf Handwriting data set.}
+Every classifier seemed to have difficulties properly classifying samples from this data set. Most likely, this is because the domain of each feature was $[-1, -1]$ and no normalizing transformations were used in any of the classifiers. This is in addition to the difficulties in classifying high-dimensional data.
+\end{enumerate}
+
+Also, there is most likely an error in the implementation of the Gaussian kernel for the Parzen Windows classifier, since it performed atrociously on every data set.
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

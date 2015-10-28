@@ -78,22 +78,25 @@ class NearestNeighbors(Classifier):
 
         self.k = k
         self.tree = KDTree(training_data)
-        self.d = d if d is not None else (lambda x, y: np.linalg.norm(y[1:] - x[1:]))
+        self.d = d if d is not None else (lambda x, y: np.linalg.norm(y - x[1:]))
 
     def test(self, points: np.ndarray, labels: np.ndarray, alt_k: int = 0):
-        if alt_k <= 0: alt_k = self.k
+        old_k = self.k
+        if alt_k > 0: self.k = alt_k
 
         num_right = 0
-        labels = self.classify(points)
+        preds = self.classify(points)
 
-        for i, label in enumerate(labels):
+        for i, label in enumerate(preds):
             if labels[i] == label:
                 num_right += 1
 
         total = points.shape[0]
-        logger.info('Got %i right out of %i (%.2f%% accuracy)' % (num_right, total, 100. * num_right / total))
+        acc = 100. * (num_right / total)
 
-        return num_right
+        logger.info('Got %i right out of %i (%.2f%% accuracy)' % (num_right, total, 100. * num_right / total))
+        if alt_k > 0: self.k = old_k
+        return num_right, acc
 
     def classify(self, data: np.ndarray) -> Iterable:
         # labels = []

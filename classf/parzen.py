@@ -55,7 +55,7 @@ class ParzenWindows(Classifier):
                  training_data: np.ndarray,
                  center: np.ndarray = None,
                  width: np.ndarray = None,
-                 kernel_id: str = 'gauss',
+                 kernel_id: str = 'box',
                  **kwargs):
         super().__init__(training_data, **kwargs)
         self.center = center
@@ -77,7 +77,6 @@ class ParzenWindows(Classifier):
         classes = training_data[:, 0]
         self.parameters = {}
 
-        logger.error("got kern %r" % (self.kernel))
         for label in self.priors.keys():
             features = training_data[np.where(classes == label)][:, 1:]
             best = -1

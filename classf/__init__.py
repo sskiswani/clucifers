@@ -55,12 +55,14 @@ def run(classifier_name: str,
         np_test = converter(testing_data)
 
         if isinstance(classifier, nearest.NearestNeighbors):
-            results = [classifier.test(np_test[:, 1:], np_test[:, 0], alt_k=i) for i in range(1, 20)]
+            k_values = range(1,20)
+            results = [classifier.test(np_test[:, 1:], np_test[:, 0], alt_k=i)[1] for i in k_values]
 
-            plt.plot(range(1, 20), results)
+            plt.plot(k_values, results)
             plt.xlabel('k')
-            plt.ylabel('Accuracy')
-            plt.xticks(range(1, 20))
+            plt.ylabel('Classification accuracy')
+            plt.xticks(range(1, np.max(k_values)))
+            plt.ylim((0, 100))
             plt.grid()
             plt.show()
         elif isinstance(classifier, parzen.ParzenWindows):
@@ -81,8 +83,8 @@ def run(classifier_name: str,
             plt.ylim((0, 100))
             plt.grid()
             plt.show()
-        else:
-            results = classifier.test(np_test[:, 1:], np_test[:, 0])
+        elif isinstance(classifier, likelihood.BayesMLE):
+            results = classifier.test_old(np_test)
 
     if classify_data is not None:
         np_clsfy = converter(classify_data)
