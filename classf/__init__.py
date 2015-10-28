@@ -28,7 +28,7 @@ def run(classifier_name: str,
         converter: Callable[[str], Iterable[np.ndarray]]=parse_file,
         testing_data: Optional[str]=None,
         classify_data: Optional[str]=None,
-        verbose: Optional[bool]=False) -> core.Classifier:
+        verbose: bool=False) -> core.Classifier:
     """
     Used to simplify development mostly.
 

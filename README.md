@@ -36,7 +36,6 @@ For the classification data, the file should not include the `class_number` (e.g
 To customize use of the `classf` module (e.g. make a custom `run.py` script), the module has a run command that can help, and following example demonstrates usage:
 
 ```python
-
 def myCustomFileParser(filepath):
     # parse file into a numpy array, with each instance a row in this array.
     # e.g. data[0] corresponds to the first instance's feature vector.
@@ -49,3 +48,7 @@ verbose = True
 
 classifier = classf.run(classifier, training_data, testing_data, verbose, myCustomFileParser)
 ```
+
+###References, etc
+
+- [Sebastian Raschka](http://sebastianraschka.com/)'s resources were a huge help in understanding.

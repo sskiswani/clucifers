@@ -32,6 +32,10 @@
 \begin{document}
 \maketitle
 
+\begin{enumerate}
+\item redo classification results using max leave one training point out success rates.
+\end{enumerate}
+
 The algorithms were implemented in {\it Python 3.4}, with a dependence on the \textit{scipy} \cite{sp} library.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -106,6 +110,12 @@ This method correctly classified $48$ of the $51$ testing samples ($94.1$\% accu
 \section{Parzen window estimation}
 \todo{You need to choose proper window functions, which you need to specify in the report along with the resulting discriminant functions for classification for each dataset. Here we choose the parameter values using the leave-one-out performance on the training set: For a set of candidate values, we compute the leave-one-out performance on the training set for each candidate and the optimal one is the one that gives the best leave-one-out performance (in case there are ties, specify how the ties will be broken).}
 
+Using hypercube, the window function is:
+$$\phi(\bm) = \left\{\begin{matrix}
+1 & |\bm_j| \leq 1/2; & j \in [1,...,d]\\
+0 & otherwise &
+\end{matrix}\right.$$
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Experimental Results}
 \subsubsection{Iris Data Set}
@@ -123,8 +133,8 @@ The $k$-nearest neighbors classifier was implemented using a $kd$-tree, subdivid
 \subsubsection{Iris Data Set}
 \begin{figure}[H]
 \centering
-\includegraphics[width=.9\textwidth]{knn_iris}
-\caption{Accuracy of the $k$-nearest neighbors classifier for $1 \leq k \leq 19$ on the Iris data set.}
+\includegraphics[width=.9\textwidth]{knn_kd_iris}
+\caption{Accuracy of the $k$-nearest neighbors classifier using a $kd$-tree for $1 \leq k \leq 19$ on the Iris data set.}
 \label{knn_iris}
 \end{figure}
 
@@ -133,8 +143,8 @@ The $k$-nearest neighbors classifier achieved a maximum classification rate of $
 \subsubsection{UCI Wine Data Set}
 \begin{figure}[H]
 \centering
-\includegraphics[width=.9\textwidth]{knn_wine}
-\caption{The accuracy of the $k$-nearest neighbors classifier for $1 \leq k \leq 19$ on the UCI wine data set.}
+\includegraphics[width=.9\textwidth]{knn_kd_wine}
+\caption{The accuracy of the $k$-nearest neighbors classifier using a $kd$-tree for $1 \leq k \leq 19$ on the UCI wine data set.}
 \label{knn_wine}
 \end{figure}
 

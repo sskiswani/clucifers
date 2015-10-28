@@ -1,28 +1,61 @@
-import pickle
 import logging
 import os
+import pickle
+
 import numpy as np
-from typing import Iterable, Union
+from typing import Iterable, Union, Optional
 
 __all__ = [
-    'Classifier'
+    'Classifier',
 ]
 
 logger = logging.getLogger(__name__)
+
+
+def z_score(data: np.ndarray, mu: float = 0, sigma: float = 1, inplace: bool = True,
+            out: Optional[np.ndarray] = None) -> np.ndarray:
+    """
+    Compute the z-transform of the given data set.
+
+    :param data: input
+    :param mu:  mean of the data
+    :param sigma: std dev.
+    :param inplace:
+    :param out: place to store the result.
+    :return: z-transformed data.
+    """
+    return (data - mu) / sigma
+
+
+def inv_zform(data: np.ndarray,
+              out: Optional[np.ndarray] = None,
+              clone: bool = True,
+              sigma: float = 1,
+              mu: float = 1) -> np.ndarray:
+    if clone or out is None:
+        out = data.copy()
+
 
 class Classifier(object):
     """
     Base class for all classifiers, defines the expected functions every classifier should have.
     """
-    def __init__(self, training_data: Union[Iterable[np.ndarray], np.ndarray], **kwargs):
+
+    def __init__(self, training_data: np.ndarray, **kwargs):
         self.training_data = training_data
 
         classes = training_data[:, 0]
         n = training_data.shape[0]
         self.priors = {a: (np.sum(classes == a) / n) for a in np.unique(classes)}
 
-    def test(self, testing_data: Union[Iterable[np.ndarray], np.ndarray]):
-        assert not hasattr(super(), 'draw')
+    def test(self, points: np.ndarray, labels: Optional[np.ndarray] = None):
+        assert not hasattr(super(), 'test')
+
+    def classify(self, data_set: np.ndarray):
+        assert not hasattr(super(), 'classify')
+
+    def iter_classify(self, data_set: np.ndarray):
+        assert not hasattr(super(), 'iter_classify')
 
     @property
     def classes(self):
@@ -85,6 +118,4 @@ def get_classifier(classifier_name: str, training_data: Union[Iterable[np.ndarra
     if classifier_name == 'parzen' or classifier_name == 'p':
         raise NotImplementedError("Parzen window estimation not implemented yet.")
 
-
     raise KeyError("Couldn't find classifier with name %s." % classifier_name)
-
