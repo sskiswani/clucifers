@@ -12,18 +12,7 @@ __all__ = [
 logger = logging.getLogger(__name__)
 
 
-def z_score(data: np.ndarray, mu: float = 0, sigma: float = 1, inplace: bool = True,
-            out: Optional[np.ndarray] = None) -> np.ndarray:
-    """
-    Compute the z-transform of the given data set.
-
-    :param data: input
-    :param mu:  mean of the data
-    :param sigma: std dev.
-    :param inplace:
-    :param out: place to store the result.
-    :return: z-transformed data.
-    """
+def z_score(data: np.ndarray, mu: float = 0, sigma: float = 1) -> np.ndarray:
     return (data - mu) / sigma
 
 
@@ -48,13 +37,13 @@ class Classifier(object):
         n = training_data.shape[0]
         self.priors = {a: (np.sum(classes == a) / n) for a in np.unique(classes)}
 
-    def test(self, points: np.ndarray, labels: Optional[np.ndarray] = None):
+    def test(self, points: Iterable[np.ndarray], labels: Iterable[np.ndarray]):
         assert not hasattr(super(), 'test')
 
-    def classify(self, data_set: np.ndarray):
+    def classify(self, data_set: Iterable[np.ndarray]):
         assert not hasattr(super(), 'classify')
 
-    def iter_classify(self, data_set: np.ndarray):
+    def iter_classify(self, data_set: Iterable[np.ndarray]):
         assert not hasattr(super(), 'iter_classify')
 
     @property
@@ -116,6 +105,7 @@ def get_classifier(classifier_name: str, training_data: Union[Iterable[np.ndarra
         return NearestNeighbors(training_data, **kwargs)
 
     if classifier_name == 'parzen' or classifier_name == 'p':
-        raise NotImplementedError("Parzen window estimation not implemented yet.")
+        from .parzen import ParzenWindows
+        return ParzenWindows(training_data, **kwargs)
 
     raise KeyError("Couldn't find classifier with name %s." % classifier_name)

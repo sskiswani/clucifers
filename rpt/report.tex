@@ -108,18 +108,61 @@ This method correctly classified $48$ of the $51$ testing samples ($94.1$\% accu
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Parzen window estimation}
-\todo{You need to choose proper window functions, which you need to specify in the report along with the resulting discriminant functions for classification for each dataset. Here we choose the parameter values using the leave-one-out performance on the training set: For a set of candidate values, we compute the leave-one-out performance on the training set for each candidate and the optimal one is the one that gives the best leave-one-out performance (in case there are ties, specify how the ties will be broken).}
-
-Using hypercube, the window function is:
-$$\phi(\bm) = \left\{\begin{matrix}
-1 & |\bm_j| \leq 1/2; & j \in [1,...,d]\\
+The window function is:
+$$\phi(\bx) = \left\{\begin{matrix}
+1 & |\bx_j| \leq 1/2; & j \in [1,...,d]\\
 0 & otherwise &
 \end{matrix}\right.$$
 
+with constants:
+$$V_n = h_n^d$$
+
+\begin{enumerate}
+\item {\bf Hypercube Kernel}
+$$p(\bx | \omega_i ) = \frac{1}{n} \sum^n_{i=1} \frac{1}{V_n} \phi \left(\frac{\bx - \bx_i}{h_n}\right)$$
+
+\item {\bf Gaussian Kernel}
+$$p(\bx | \omega_i ) = \frac{1}{n} \sum^n_{i=1} \frac{1}{V_n} \phi \left(\frac{1}{\sqrt{2\pi}^d V_n} \exp\left[-\frac{1}{2} \left(\frac{\bx - \bx_i}{h_n}\right)^2\right]\right)$$
+\end{enumerate}
+
+All data processed by this classifier was transformed using the \emph{z-score}:
+$$\mathbf{z_x} = \frac{\bx - \bm}{\mathbf{\sigma}}$$
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Experimental Results}
+For all given data sets, the \emph{Hypercube kernel} was the most accurate method.
+
 \subsubsection{Iris Data Set}
+\begin{figure}[H]
+\centering
+\includegraphics[width=.8\textwidth]{p_box_iris}
+\caption{Accuracy of the Parzen window classifier using the \emph{Hypercube kernel} across different window widths for the iris data set.}
+\label{pb_iris}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.8\textwidth]{pg_iris}
+\caption{Accuracy of the Parzen window classifier using the \emph{Gaussian kernel} across different window widths for the iris data set.}
+\label{pg_iris}
+\end{figure}
+
 \subsubsection{UCI Wine Data Set}
+\begin{figure}[H]
+\centering
+\includegraphics[width=.8\textwidth]{p_box_wine}
+\caption{Accuracy of the Parzen window classifier using the hypercube window function across different window widths for the wine data set.}
+\label{pb_wine}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.8\textwidth]{pg_wine}
+\caption{Accuracy of the Parzen window classifier using the \emph{Gaussian kernel} across different window widths for the wine data set.}
+\label{pg_wine}
+\end{figure}
+
+
 \subsubsection{Handwritten Digits Data Set}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

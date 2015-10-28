@@ -80,7 +80,9 @@ class NearestNeighbors(Classifier):
         self.tree = KDTree(training_data)
         self.d = d if d is not None else (lambda x, y: np.linalg.norm(y[1:] - x[1:]))
 
-    def test(self, points: np.ndarray, labels: Optional[np.ndarray] = None):
+    def test(self, points: np.ndarray, labels: np.ndarray, alt_k: int = 0):
+        if alt_k <= 0: alt_k = self.k
+
         num_right = 0
         labels = self.classify(points)
 
@@ -117,10 +119,10 @@ class NearestNeighbors(Classifier):
             ncount.update([x[0] for x in neighbors])
             yield ncount.most_common()[0][0]
 
-    def test2(self,
-              testing_data: Union[Iterable[np.ndarray], np.ndarray],
-              alt_k: Optional[int] = None,
-              d: Optional[Callable[[np.ndarray, np.ndarray], float]] = None):
+    def test_old(self,
+                 testing_data: Union[Iterable[np.ndarray], np.ndarray],
+                 alt_k: Optional[int] = None,
+                 d: Optional[Callable[[np.ndarray, np.ndarray], float]] = None):
         if alt_k is None: alt_k = self.k
         if d is None: d = lambda x, y: np.linalg.norm(y[1:] - x[1:])
 

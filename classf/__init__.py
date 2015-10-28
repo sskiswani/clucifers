@@ -1,7 +1,8 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import logging
-from typing import Callable, Optional, Iterable
+
+import matplotlib.pyplot as plt
+import numpy as np
+from typing import Callable, Optional
 
 from . import core
 from . import likelihood, nearest, parzen
@@ -12,6 +13,7 @@ _all_ = [
     'nearest',
     'parzen'
 ]
+
 
 def parse_file(fpath: str) -> np.ndarray:
     """
@@ -25,10 +27,10 @@ def parse_file(fpath: str) -> np.ndarray:
 
 def run(classifier_name: str,
         training_data: str,
-        converter: Callable[[str], Iterable[np.ndarray]]=parse_file,
-        testing_data: Optional[str]=None,
-        classify_data: Optional[str]=None,
-        verbose: bool=False) -> core.Classifier:
+        converter: Callable[[str], np.ndarray] = parse_file,
+        testing_data: Optional[str] = None,
+        classify_data: Optional[str] = None,
+        verbose: bool = False) -> core.Classifier:
     """
     Used to simplify development mostly.
 
@@ -51,8 +53,9 @@ def run(classifier_name: str,
 
     if testing_data is not None:
         np_test = converter(testing_data)
+
         if isinstance(classifier, nearest.NearestNeighbors):
-            results = [classifier.test(np_test, alt_k=i) for i in range(1, 20)]
+            results = [classifier.test(np_test[:, 1:], np_test[:, 0], alt_k=i) for i in range(1, 20)]
 
             plt.plot(range(1, 20), results)
             plt.xlabel('k')
@@ -60,9 +63,26 @@ def run(classifier_name: str,
             plt.xticks(range(1, 20))
             plt.grid()
             plt.show()
+        elif isinstance(classifier, parzen.ParzenWindows):
+            results = []
+            all_widths = np.linspace(0.1, 10, num=100)
+            ones = np.ones_like(np_test[0, 1:])
 
+            for width in all_widths:
+                # new_classf = parzen.ParzenWindows(np_train, ones * width)
+                new_classf = classifier
+                new_classf.set_width(ones * width)
+                results.append(new_classf.test(np_test[:, 1:], np_test[:, 0])[1])
+
+            plt.plot(all_widths, results)
+            plt.xlabel('Window width')
+            plt.ylabel('Classification accuracy')
+            plt.xticks(range(1, np.max(all_widths).astype(np.int)))
+            plt.ylim((0, 100))
+            plt.grid()
+            plt.show()
         else:
-            classifier.test(testing_data)
+            results = classifier.test(np_test[:, 1:], np_test[:, 0])
 
     if classify_data is not None:
         np_clsfy = converter(classify_data)
