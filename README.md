@@ -1,4 +1,5 @@
 # Classifiers
+*Caveat Emptor!* There are some embarrassing errors that I need to fix, however, I think a look at the punch card will provide a complete explanation for their existance.
 
 Three classifiers:
 
